@@ -1,7 +1,8 @@
 package com.tungstenautomationlab.tungstenautomationlab.userdetailsmanagement;
 
-import com.tungstenautomationlab.tungstenautomationlab.expection.BadRequestException;
+import com.tungstenautomationlab.tungstenautomationlab.expection.ThrowApiError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class UserDetailsService {
 
    private void validateRequestBody(UserCreateRquestBody requestBody) {
         if (requestBody.getFullName().length() < 3) {
-            throw new BadRequestException("name cannot be less than 3 characters", 1001);
+            throw new ThrowApiError("name cannot be less than 3 characters", 1001, HttpStatus.BAD_REQUEST);
         }
    }
 }
