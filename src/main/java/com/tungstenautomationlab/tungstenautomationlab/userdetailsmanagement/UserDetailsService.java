@@ -1,9 +1,8 @@
 package com.tungstenautomationlab.tungstenautomationlab.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.expection.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,9 +35,9 @@ public class UserDetailsService {
         return map;
     }
 
-    private void validateRequestBody(UserCreateRquestBody requestBody) {
+   private void validateRequestBody(UserCreateRquestBody requestBody) {
         if (requestBody.getFullName().length() < 3) {
-            throw new IllegalArgumentException("name should not be less than 3 character");
+            throw new BadRequestException("name cannot be less than 3 characters", 1001);
         }
-    }
+   }
 }
