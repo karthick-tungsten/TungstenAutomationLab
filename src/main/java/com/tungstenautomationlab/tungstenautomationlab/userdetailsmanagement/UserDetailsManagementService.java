@@ -27,7 +27,6 @@ public class UserDetailsManagementService {
     public Map<String, Object> createUser(UserCreateRquestBody requestBody) {
         validateRequestBody(requestBody);
         verifyUserAlreadyExists(requestBody.getEmail());
-
         Users user = new Users();
         user.setId(UUID.randomUUID().toString());
         user.setFullName(requestBody.getFullName());
@@ -35,7 +34,6 @@ public class UserDetailsManagementService {
         user.setPassword(passwordConfig.passwordEncoder().encode(requestBody.getPassword()));
         user.setRole(requestBody.getRole());
         userDetailsRepository.save(user);
-
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);
         map.put("message", "user created successfully!");
