@@ -2,6 +2,7 @@ package com.tungstenautomationlab.tungstenautomationlab.jwt;
 
 import com.google.common.base.Strings;
 import com.tungstenautomationlab.tungstenautomationlab.constants.Configs;
+import com.tungstenautomationlab.tungstenautomationlab.userdetailsmanagement.UserDetailsRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -12,8 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +25,11 @@ import java.util.stream.Collectors;
 
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
+    private final UserDetailsRepository userDetailsRepository;
+
+    public JwtTokenVerifier(UserDetailsRepository userDetailsRepository) {
+        this.userDetailsRepository = userDetailsRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -56,8 +60,10 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                     .map(m -> new SimpleGrantedAuthority(m.get("authority")))
                     .collect(Collectors.toSet());
 
+            String email=userDetailsRepository.findById(username).get().getEmail();
+
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    username,
+                    email,
                     null,
                     simpleGrantedAuthorities
             );
