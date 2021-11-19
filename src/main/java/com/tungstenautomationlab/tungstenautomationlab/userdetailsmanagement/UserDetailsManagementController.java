@@ -25,8 +25,4 @@ public class UserDetailsManagementController {
         return userDetailsService.createUser(createRquestBody);
     }
 
-    @GetMapping("api/v1/getAll")
-    public List<Users> getAll(){
-        return userDetailsService.getAll();
-    }
 }
