@@ -9,5 +9,4 @@ class TungstenautomationlabApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

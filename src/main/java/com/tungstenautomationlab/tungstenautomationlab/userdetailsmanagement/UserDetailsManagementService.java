@@ -6,6 +6,7 @@ import com.tungstenautomationlab.tungstenautomationlab.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -58,9 +59,12 @@ public class UserDetailsManagementService {
             throw new ThrowApiError("name cannot be less than 3 characters and should not contains numbers", 1001, HttpStatus.BAD_REQUEST);
         if (requestBody.getEmail().isEmpty() || !validateEmailFormat(requestBody.getEmail()))
             throw new ThrowApiError("invalid email format", 1002, HttpStatus.BAD_REQUEST);
-        if (requestBody.getPassword().isEmpty())
+        if (requestBody.getPassword().isEmpty() || requestBody.getPassword().length() < 5)
             throw new ThrowApiError("invalid password", 1003, HttpStatus.BAD_REQUEST);
         try {
+            if (Roles.SUPERADMIN == Roles.valueOf(requestBody.getRole())) {
+                throw new IllegalArgumentException();
+            }
             Roles.valueOf(requestBody.getRole());
         } catch (IllegalArgumentException e) {
             throw new ThrowApiError("invalid role", 1004, HttpStatus.BAD_REQUEST);
