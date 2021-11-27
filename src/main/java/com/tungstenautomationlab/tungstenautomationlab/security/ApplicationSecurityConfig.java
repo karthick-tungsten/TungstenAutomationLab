@@ -50,7 +50,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/v1/superAdmin/create/**").permitAll()
                 .antMatchers("/api/v1/superAdmin/resetPassword/**").permitAll()
+                .antMatchers("/assets/**").permitAll()
                 .antMatchers("/").permitAll()
+                .antMatchers("/**.js","/**.css").permitAll()
                 .anyRequest().authenticated();
     }
 
