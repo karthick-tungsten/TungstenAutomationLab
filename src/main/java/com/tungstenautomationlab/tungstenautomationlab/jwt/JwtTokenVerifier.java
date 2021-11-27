@@ -2,12 +2,14 @@ package com.tungstenautomationlab.tungstenautomationlab.jwt;
 
 import com.google.common.base.Strings;
 import com.tungstenautomationlab.tungstenautomationlab.constants.Configs;
+import com.tungstenautomationlab.tungstenautomationlab.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.userdetailsmanagement.UserDetailsRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -71,7 +73,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (JwtException e) {
-            throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
+            throw new ThrowApiError("invalid token",9999, HttpStatus.UNAUTHORIZED);
         }
 
         filterChain.doFilter(request, response);
