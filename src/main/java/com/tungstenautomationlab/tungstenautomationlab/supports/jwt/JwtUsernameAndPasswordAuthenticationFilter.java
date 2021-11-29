@@ -1,7 +1,7 @@
 package com.tungstenautomationlab.tungstenautomationlab.supports.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tungstenautomationlab.tungstenautomationlab.supports.authentication.constants.Configs;
+import com.tungstenautomationlab.tungstenautomationlab.supports.constants.Configs;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.Users;
 import io.jsonwebtoken.Jwts;
