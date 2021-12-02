@@ -1,7 +1,7 @@
 package com.tungstenautomationlab.tungstenautomationlab.supports.jwt;
 
 import com.google.common.base.Strings;
-import com.tungstenautomationlab.tungstenautomationlab.supports.authentication.constants.Configs;
+import com.tungstenautomationlab.tungstenautomationlab.supports.constants.Configs;
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
 import io.jsonwebtoken.Claims;
