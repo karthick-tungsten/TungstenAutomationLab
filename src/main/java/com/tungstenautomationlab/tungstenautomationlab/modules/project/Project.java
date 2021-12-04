@@ -5,9 +5,10 @@ import javax.persistence.Id;
 
 @Entity(name = "ProjectDetails")
 public class Project {
+
     @Id
-    private String ProjectName;
     private String ProjectId;
+    private String ProjectName;
     private String Owner;
 
     public String getProjectName() {

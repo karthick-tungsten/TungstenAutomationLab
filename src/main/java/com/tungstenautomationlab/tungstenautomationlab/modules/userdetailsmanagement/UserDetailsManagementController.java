@@ -20,9 +20,13 @@ public class UserDetailsManagementController {
 
     @PostMapping("api/v1/createUser")
     @PreAuthorize("hasAnyRole('SUPERADMIN')")
-    public Map<String, Object> createUser(@RequestBody UserCreateRquestBody createRquestBody){
+    public Map<String, Object> createUser(@RequestBody UserCreateRquestBody createRquestBody) {
         return userDetailsService.createUser(createRquestBody);
     }
 
+    @PostMapping("api/v1/parammap")
+    public void paramap(@RequestBody String json) {
+        System.out.println(json);
+    }
 
 }
