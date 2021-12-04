@@ -25,12 +25,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsRepository userDetailsRepository;
     private final LoginService loginService;
+    private final TokenDetails tokenDetails;
 
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, UserDetailsRepository userDetailsRepository, LoginService loginService) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, UserDetailsRepository userDetailsRepository, LoginService loginService, TokenDetails tokenDetails) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsRepository = userDetailsRepository;
         this.loginService = loginService;
+        this.tokenDetails = tokenDetails;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),userDetailsRepository))
-                .addFilterAfter(new JwtTokenVerifier(userDetailsRepository), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenVerifier(userDetailsRepository, tokenDetails), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/api/v1/superAdmin/create/**").permitAll()
                 .antMatchers("/api/v1/superAdmin/resetPassword/**").permitAll()

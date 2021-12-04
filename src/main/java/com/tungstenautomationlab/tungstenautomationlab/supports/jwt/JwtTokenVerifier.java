@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.tungstenautomationlab.tungstenautomationlab.supports.constants.Configs;
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
+import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -28,9 +29,11 @@ import java.util.stream.Collectors;
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final UserDetailsRepository userDetailsRepository;
+    private final TokenDetails tokenDetails;
 
-    public JwtTokenVerifier(UserDetailsRepository userDetailsRepository) {
+    public JwtTokenVerifier(UserDetailsRepository userDetailsRepository, TokenDetails tokenDetails) {
         this.userDetailsRepository = userDetailsRepository;
+        this.tokenDetails = tokenDetails;
     }
 
     @Override
@@ -71,7 +74,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            tokenDetails.setUserId(body.getSubject());
         } catch (JwtException e) {
             throw new ThrowApiError("invalid token",9999, HttpStatus.UNAUTHORIZED);
         }
