@@ -1,5 +1,6 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -12,6 +13,9 @@ public class Users {
     private String email;;
     private String password;
     private String role;
+    private String createdOn;
+    @Nullable
+    private String lastUpdate;
 
     public String getId() {
         return id;
@@ -51,5 +55,34 @@ public class Users {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", createdOn='" + createdOn + '\'' +
+                ", lastUpdate='" + lastUpdate + '\'' +
+                '}';
     }
 }

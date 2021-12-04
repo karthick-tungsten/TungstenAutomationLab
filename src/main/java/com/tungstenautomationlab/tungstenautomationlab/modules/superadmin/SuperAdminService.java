@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -29,6 +30,7 @@ public class SuperAdminService {
         users.setPassword(passwordConfig.passwordEncoder().encode(body.getPassword()));
         users.setFullName("Super Admin");
         users.setRole(Roles.SUPERADMIN.name());
+        users.setCreatedOn(LocalDateTime.now().toString());
         userDetailsRepository.save(users);
         Map<String, Object> response = new HashMap<>();
         response.put("status", 200);
