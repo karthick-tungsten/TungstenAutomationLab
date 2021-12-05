@@ -26,7 +26,7 @@ public class UserDetailsManagementController {
 
     @PostMapping("working")
     public String paramap(@RequestBody String json) {
-        return "working"
+        return "working";
     }
 
 }
