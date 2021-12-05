@@ -2,6 +2,8 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.project;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProjectRepository extends JpaRepository <Project,String>{
+import java.util.List;
 
+public interface ProjectRepository extends JpaRepository <Project,String>{
+    List<Project> findByOwner(String ownerId);
 }
