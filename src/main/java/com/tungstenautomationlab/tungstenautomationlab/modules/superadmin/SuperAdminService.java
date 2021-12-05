@@ -45,9 +45,9 @@ public class SuperAdminService {
     }
 
     private void verifySuperAdminBody(SuperAdminRequestBody body) {
-        if (body.getUsername().isEmpty())
+        if (body.getUsername().isEmpty()|| body.getUsername().length() < 3)
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
-        if (body.getPassword().isEmpty())
+        if (body.getPassword().isEmpty() || body.getPassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
     }
 
