@@ -3,10 +3,12 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanag
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.PasswordConfig;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.Roles;
+import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,11 +18,13 @@ public class UserDetailsManagementService {
 
     private final UserDetailsRepository userDetailsRepository;
     private final PasswordConfig passwordConfig;
+    private final TokenDetails tokenDetails;
 
     @Autowired
-    public UserDetailsManagementService(UserDetailsRepository userDetailsRepository, PasswordConfig passwordConfig) {
+    public UserDetailsManagementService(UserDetailsRepository userDetailsRepository, PasswordConfig passwordConfig, TokenDetails tokenDetails) {
         this.userDetailsRepository = userDetailsRepository;
         this.passwordConfig = passwordConfig;
+        this.tokenDetails = tokenDetails;
     }
 
     public Map<String, Object> createUser(UserCreateRquestBody requestBody) {
@@ -32,6 +36,7 @@ public class UserDetailsManagementService {
         user.setEmail(requestBody.getEmail());
         user.setPassword(passwordConfig.passwordEncoder().encode(requestBody.getPassword()));
         user.setRole(requestBody.getRole());
+        user.setCreatedOn(LocalDateTime.now().toString());
         userDetailsRepository.save(user);
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);
@@ -69,4 +74,15 @@ public class UserDetailsManagementService {
         }
     }
 
+    public Map<String, String> getUserDetails() {
+        String userId= tokenDetails.getUserId();
+        Users user=userDetailsRepository.findById(userId).get();
+        Map<String,String> map=new HashMap<>();
+        map.put("fullName",user.getFullName());
+        map.put("email",user.getEmail());
+        map.put("role",user.getRole());
+        map.put("createdOn",user.getCreatedOn());
+        map.put("lastUpdate",user.getLastUpdate());
+        return map;
+    }
 }

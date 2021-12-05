@@ -1,5 +1,6 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.project;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,33 +8,65 @@ import javax.persistence.Id;
 public class Project {
 
     @Id
-    private String ProjectId;
-    private String ProjectName;
-    private String Owner;
+    private String projectId;
+    private String projectName;
+    private String owner;
+    private String createdOn;
+    @Nullable
+    private String lastUpdate;
 
     public String getProjectName() {
-        return ProjectName;
+        return projectName;
     }
 
     public void setProjectName(String projectName) {
-        ProjectName = projectName;
+        this.projectName = projectName;
     }
 
     public String getProjectId() {
-        return ProjectId;
+        return projectId;
     }
 
     public void setProjectId(String projectId) {
-        ProjectId = projectId;
+        this.projectId = projectId;
     }
 
     public String getOwner() {
-        return Owner;
+        return owner;
     }
 
     public void setOwner(String owner) {
-        Owner = owner;
+        this.owner = owner;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    @Nullable
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(@Nullable String lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projectId='" + projectId + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", owner='" + owner + '\'' +
+                ", createdOn='" + createdOn + '\'' +
+                ", lastUpdate='" + lastUpdate + '\'' +
+                '}';
     }
 }
+
 
 
