@@ -24,9 +24,9 @@ public class UserDetailsManagementController {
         return userDetailsService.createUser(createRquestBody);
     }
 
-    @PostMapping("api/v1/parammap")
-    public void paramap(@RequestBody String json) {
-        System.out.println(json);
+    @PostMapping("working")
+    public String paramap(@RequestBody String json) {
+        return "working"
     }
 
 }
