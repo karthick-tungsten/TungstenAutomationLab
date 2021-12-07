@@ -53,6 +53,7 @@ public class SuperAdminService {
 
     public Map<String, Object> resetPassword(SuperAdminRequestBody body) {
         Users users = findSuperAdmin(body.getUsername());
+        validateResetPassword(body);
         users.setPassword(passwordConfig.passwordEncoder().encode(body.getNewpassword()));
         userDetailsRepository.save(users);
         Map<String, Object> response = new HashMap<>();
@@ -60,6 +61,13 @@ public class SuperAdminService {
         response.put("message", "super admin password reset successfully!");
         return response;
     }
+
+    private void validateResetPassword(SuperAdminRequestBody body) {
+        if(body.getNewpassword().length()<5){
+            throw new ThrowApiError("password can't be blank and less than 5 characters",1014,HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     private Users findSuperAdmin(String username) {
         List<Users> users = userDetailsRepository.findByEmail(username);
