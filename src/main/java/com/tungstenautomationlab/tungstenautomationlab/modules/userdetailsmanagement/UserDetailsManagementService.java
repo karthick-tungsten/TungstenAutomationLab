@@ -58,7 +58,7 @@ public class UserDetailsManagementService {
     }
 
     private void validateRequestBody(UserCreateRquestBody requestBody) {
-        if (requestBody.getFullName().length() < 3 || !requestBody.getFullName().matches("^[a-zA-Z]*$"))
+        if (requestBody.getFullName().length() < 3 || !requestBody.getFullName().matches("^[a-zA-Z0-9_]*$"))
             throw new ThrowApiError("name cannot be less than 3 characters and should not contains numbers", 1001, HttpStatus.BAD_REQUEST);
         if (requestBody.getEmail().isEmpty() || !validateEmailFormat(requestBody.getEmail()))
             throw new ThrowApiError("invalid email format", 1002, HttpStatus.BAD_REQUEST);
