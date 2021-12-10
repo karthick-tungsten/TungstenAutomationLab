@@ -1,5 +1,6 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class UserDetailsManagementController {
         return userDetailsService.createUser(createRquestBody);
     }
 
-    @PostMapping("api/v1/parammap")
+    @PostMapping("api/v1/getUserDetials")
     public void paramap(@RequestBody String json) {
         System.out.println(json);
     }
