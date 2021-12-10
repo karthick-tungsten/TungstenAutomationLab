@@ -5,4 +5,5 @@ public interface UserDetailsWithoutPassword {
     String getFullName();
     String getEmail();
     String getRole();
+    String getCreatedOn();
 }
