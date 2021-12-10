@@ -2,12 +2,19 @@ package com.tungstenautomationlab.tungstenautomationlab;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class TungstenautomationlabApplication {
+public class TungstenautomationlabApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TungstenautomationlabApplication.class, args);
 	}
+	
+	@Override
+    	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        	return application.sources(TungstenautomationlabApplication.class);
+    	}  
 
 }
