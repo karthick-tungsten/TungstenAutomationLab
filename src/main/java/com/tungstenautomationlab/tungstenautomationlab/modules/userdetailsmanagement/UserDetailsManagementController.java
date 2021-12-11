@@ -1,5 +1,6 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,4 @@ public class UserDetailsManagementController {
     public Map<String, String> getUserDetails(){
         return userDetailsService.getUserDetails();
     }
-
-
 }

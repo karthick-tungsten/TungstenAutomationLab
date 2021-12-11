@@ -1,4 +1,4 @@
-package com.tungstenautomationlab.tungstenautomationlab.modules.superadmin;
+package com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.requestbody;
 
 import lombok.Getter;
 import lombok.Setter;
