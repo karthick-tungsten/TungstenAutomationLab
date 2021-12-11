@@ -30,6 +30,4 @@ public class UserDetailsManagementController {
     public Map<String, String> getUserDetails(){
         return userDetailsService.getUserDetails();
     }
-
-
 }

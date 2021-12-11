@@ -30,4 +30,6 @@ public class SuperAdminController {
     public GetAllUsersResponse getAllUsers(){
         return superAdminService.getAllUsers();
     }
+
+
 }
