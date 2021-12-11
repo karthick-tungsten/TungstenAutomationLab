@@ -85,4 +85,5 @@ public class UserDetailsManagementService {
         map.put("lastUpdate",user.getLastUpdate());
         return map;
     }
+
 }

@@ -22,4 +22,5 @@ public class SuperAdminController {
     public Map<String, Object> resetPassword(@RequestBody SuperAdminRequestBody superAdminRequestBody){
         return this.superAdminService.resetPassword(superAdminRequestBody);
     }
+
 }

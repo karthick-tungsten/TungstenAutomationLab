@@ -2,10 +2,7 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,4 +29,14 @@ public class ProjectController {
         map.put("projectDetails",projectService.getProjectDetails());
         return map;
     }
+    @PutMapping("/api/v1/updateProject")
+    public Map<String,Object> updateProject(@RequestBody Map<String,String> updatepro){
+       return projectService.updateproject(updatepro);
+
+
+
+    }
+
+
+
 }
