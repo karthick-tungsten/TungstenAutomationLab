@@ -1,4 +1,4 @@
-package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
+package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody;
 
 public class UserCreateRquestBody {
 

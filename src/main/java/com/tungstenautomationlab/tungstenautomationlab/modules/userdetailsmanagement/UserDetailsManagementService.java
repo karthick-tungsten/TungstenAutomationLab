@@ -1,5 +1,6 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.PasswordConfig;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.Roles;
