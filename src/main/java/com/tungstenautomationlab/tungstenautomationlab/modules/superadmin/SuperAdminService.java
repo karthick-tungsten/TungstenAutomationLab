@@ -1,6 +1,9 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.superadmin;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.project.Project;
+import com.tungstenautomationlab.tungstenautomationlab.modules.project.ProjectRepository;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.requestbody.SuperAdminRequestBody;
+import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllProjectsResponse;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllUsersResponse;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.UserDetailsWithoutPassword;
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
@@ -21,6 +24,7 @@ public class SuperAdminService {
 
     private final UserDetailsRepository userDetailsRepository;
     private final PasswordConfig passwordConfig;
+    private final ProjectRepository projectRepository;
 
     /***
      * method to create super admin
@@ -132,6 +136,25 @@ public class SuperAdminService {
         }
         response.setUsersList(users);
         return response;
+    }
+
+    public GetAllProjectsResponse getAllProjects() {
+        List<Project> projects = projectRepository.findAll();
+
+        GetAllProjectsResponse.MetaData metaData = new GetAllProjectsResponse.MetaData();
+        metaData.setProjectCount(projects.size());
+        metaData.setMessage("projects available");
+
+
+
+
+
+
+
+        return null;
+
+
+
     }
 }
 
