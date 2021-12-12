@@ -11,6 +11,7 @@ import com.tungstenautomationlab.tungstenautomationlab.supports.security.Passwor
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.Roles;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.Users;
+import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class SuperAdminService {
     private final UserDetailsRepository userDetailsRepository;
     private final PasswordConfig passwordConfig;
     private final ProjectRepository projectRepository;
+    private final TokenDetails tokenDetails;
 
     /***
      * method to create super admin
@@ -50,7 +52,7 @@ public class SuperAdminService {
 
     /***
      * method to user the super admin is available in the database
-     * @implNote   this method is void and it will throw error if the user admin already available
+     * @implNote this method is void and it will throw error if the user admin already available
      */
     private void verifySuperAdminIsAlreadyAvailable() {
         List<Users> users = userDetailsRepository.getByRole("SUPERADMIN");
@@ -68,7 +70,7 @@ public class SuperAdminService {
         if (body.getPassword().isEmpty() || body.getPassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
         if (body.getUsername().matches("\\d+"))
-            throw new ThrowApiError("username should alphanumeric values",1013,HttpStatus.BAD_REQUEST);
+            throw new ThrowApiError("username should alphanumeric values", 1013, HttpStatus.BAD_REQUEST);
     }
 
     /***
@@ -87,9 +89,10 @@ public class SuperAdminService {
         response.put("message", "super admin password reset successfully!");
         return response;
     }
-    private void verifyResetPassword(SuperAdminRequestBody body){
 
-        if (body.getUsername().isEmpty()|| body.getUsername().length() < 3)
+    private void verifyResetPassword(SuperAdminRequestBody body) {
+
+        if (body.getUsername().isEmpty() || body.getUsername().length() < 3)
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
         if (body.getNewpassword().isEmpty() || body.getNewpassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
@@ -97,8 +100,8 @@ public class SuperAdminService {
     }
 
     private void validateResetPassword(SuperAdminRequestBody body) {
-        if(body.getNewpassword().length()<5){
-            throw new ThrowApiError("password can't be blank and less than 5 characters",1014,HttpStatus.BAD_REQUEST);
+        if (body.getNewpassword().length() < 5) {
+            throw new ThrowApiError("password can't be blank and less than 5 characters", 1014, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -121,14 +124,14 @@ public class SuperAdminService {
      */
     public GetAllUsersResponse getAllUsers() {
         List<UserDetailsWithoutPassword> users = userDetailsRepository.findAllByRoleNot(Roles.SUPERADMIN.name());
-        GetAllUsersResponse response=new GetAllUsersResponse();
+        GetAllUsersResponse response = new GetAllUsersResponse();
         GetAllUsersResponse.MetaData metaData = new GetAllUsersResponse.MetaData();
-        if(users.size()==0) {
+        if (users.size() == 0) {
             metaData.setMessage("no users found");
             metaData.setUserCount(0);
             metaData.setStatusCode(1041);
             response.setMetaData(metaData);
-        }else{
+        } else {
             metaData.setMessage("users found");
             metaData.setUserCount(users.size());
             metaData.setStatusCode(1040);
@@ -139,22 +142,35 @@ public class SuperAdminService {
     }
 
     public GetAllProjectsResponse getAllProjects() {
+        String loggedInId=tokenDetails.getUserId();
         List<Project> projects = projectRepository.findAll();
 
         GetAllProjectsResponse.MetaData metaData = new GetAllProjectsResponse.MetaData();
         metaData.setProjectCount(projects.size());
-        metaData.setMessage("projects available");
+        metaData.setMessage((projects.size() == 0) ? "projects not available" : "projects available");
 
+        List<GetAllProjectsResponse.ProjectList> projectLists = new ArrayList<>();
 
+        projects.forEach(project -> {
+            GetAllProjectsResponse.ProjectList.ProjectDetails projectDetails = new GetAllProjectsResponse.ProjectList.ProjectDetails();
+            projectDetails.setProjectId(project.getProjectId());
+            projectDetails.setProjectName(project.getProjectName());
 
+            GetAllProjectsResponse.ProjectList.OwnerDetails ownerDetails = new GetAllProjectsResponse.ProjectList.OwnerDetails();
+            Users user= userDetailsRepository.findById(project.getOwner()).get();
+            ownerDetails.setOwnerName((loggedInId.equals(project.getOwner()))?"Self":user.getFullName());
+            ownerDetails.setOwnerId(project.getOwner());
 
+            GetAllProjectsResponse.ProjectList projectList = new GetAllProjectsResponse.ProjectList();
+            projectList.setProjectDetails(projectDetails);
+            projectList.setOwnerDetails(ownerDetails);
+            projectLists.add(projectList);
+        });
 
-
-
-        return null;
-
-
-
+        GetAllProjectsResponse response = new GetAllProjectsResponse();
+        response.setProjectList(projectLists);
+        response.setMetaData(metaData);
+        return response;
     }
 }
 
