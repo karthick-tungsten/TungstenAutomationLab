@@ -50,6 +50,12 @@ public class ProjectService {
         return out;
     }
 
+    /***
+     * update project using updatepro parameter
+     * valdiate projectname and error checking using validateUpdateProjectRequestBody function
+     * @param updatepro
+     * @return
+     */
 
     public Map<String, Object> updateproject(Map<String, String> updatepro) {
         validateUpdateProjectRequestBody(updatepro);

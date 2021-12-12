@@ -57,6 +57,10 @@ public class UserDetailsManagementService {
         }
     }
 
+    /***
+     * fullname created  for onespace between username in first if statement
+     * @param requestBody
+     */
     private void validateRequestBody(UserCreateRquestBody requestBody) {
         if (requestBody.getFullName().length() < 3 || !requestBody.getFullName().matches("^[a-zA-z]+([\\s][a-zA-Z]+)*$"))
             throw new ThrowApiError("name cannot be less than 3 characters and should not contains numbers", 1001, HttpStatus.BAD_REQUEST);

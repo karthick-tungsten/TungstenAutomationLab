@@ -44,6 +44,10 @@ public class SuperAdminService {
             throw new ThrowApiError("already one user admin available!", 1010, HttpStatus.ALREADY_REPORTED);
     }
 
+    /***
+     * additional add condition for Username  and if have number in username ,return error
+     * @param body
+     */
     private void verifySuperAdminBody(SuperAdminRequestBody body) {
         if (body.getUsername().isEmpty()|| body.getUsername().length() < 3)
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
