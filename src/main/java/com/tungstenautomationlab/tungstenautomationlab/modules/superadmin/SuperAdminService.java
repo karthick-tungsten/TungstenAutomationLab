@@ -89,10 +89,9 @@ public class SuperAdminService {
         response.put("message", "super admin password reset successfully!");
         return response;
     }
+    private void verifyResetPassword(SuperAdminRequestBody body){
 
-    private void verifyResetPassword(SuperAdminRequestBody body) {
-
-        if (body.getUsername().isEmpty() || body.getUsername().length() < 3)
+        if (body.getUsername().isEmpty()|| body.getUsername().length() < 3)
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
         if (body.getNewpassword().isEmpty() || body.getNewpassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
@@ -100,8 +99,8 @@ public class SuperAdminService {
     }
 
     private void validateResetPassword(SuperAdminRequestBody body) {
-        if (body.getNewpassword().length() < 5) {
-            throw new ThrowApiError("password can't be blank and less than 5 characters", 1014, HttpStatus.BAD_REQUEST);
+        if(body.getNewpassword().length()<5){
+            throw new ThrowApiError("password can't be blank and less than 5 characters",1014,HttpStatus.BAD_REQUEST);
         }
     }
 
