@@ -49,6 +49,8 @@ public class SuperAdminService {
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
         if (body.getPassword().isEmpty() || body.getPassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
+        if (body.getUsername().matches("\\d+"))
+            throw new ThrowApiError("username should alphanumeric values",1013,HttpStatus.BAD_REQUEST);
     }
 
     public Map<String, Object> resetPassword(SuperAdminRequestBody body) {
