@@ -55,15 +55,16 @@ public class SuperAdminService {
     }
 
     /***
-     * method to validate the api call parameters
+     * additional add condition for Username  and if have number in username ,return error
      * @param body
-     * @implNote
      */
     private void verifySuperAdminBody(SuperAdminRequestBody body) {
         if (body.getUsername().length() < 3 || !body.getUsername().matches("^[a-zA-Z0-9_]*$"))
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
         if (body.getPassword().isEmpty() || body.getPassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
+        if (body.getUsername().matches("\\d+"))
+            throw new ThrowApiError("username should alphanumeric values",1013,HttpStatus.BAD_REQUEST);
     }
 
     /***
@@ -72,6 +73,7 @@ public class SuperAdminService {
      * @return
      */
     public Map<String, Object> resetPassword(SuperAdminRequestBody body) {
+        verifyResetPassword(body);
         Users users = findSuperAdmin(body.getUsername());
         validateResetPassword(body);
         users.setPassword(passwordConfig.passwordEncoder().encode(body.getNewpassword()));
@@ -80,6 +82,14 @@ public class SuperAdminService {
         response.put("status", 200);
         response.put("message", "super admin password reset successfully!");
         return response;
+    }
+    private void verifyResetPassword(SuperAdminRequestBody body){
+
+        if (body.getUsername().isEmpty()|| body.getUsername().length() < 3)
+            throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
+        if (body.getNewpassword().isEmpty() || body.getNewpassword().length() < 5)
+            throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
+
     }
 
     private void validateResetPassword(SuperAdminRequestBody body) {
