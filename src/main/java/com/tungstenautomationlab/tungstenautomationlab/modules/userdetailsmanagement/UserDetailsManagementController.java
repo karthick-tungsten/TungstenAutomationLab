@@ -27,4 +27,16 @@ public class UserDetailsManagementController {
     public Map<String, String> getUserDetails(){
         return userDetailsService.getUserDetails();
     }
+
+    /***
+     * deletemapping for delete user form database
+     * @param id
+     * @return
+     */
+    @DeleteMapping("api/v1/deleteUser/{id}")
+    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    public Map<String, Object> deleteUser(@PathVariable("id")  String id){
+       return userDetailsService.deleteUser(id);
+    }
+
 }
