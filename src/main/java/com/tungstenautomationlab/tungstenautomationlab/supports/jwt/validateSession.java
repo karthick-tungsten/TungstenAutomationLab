@@ -1,52 +1,43 @@
 package com.tungstenautomationlab.tungstenautomationlab.supports.jwt;
-
 import com.google.common.base.Strings;
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
 import com.tungstenautomationlab.tungstenautomationlab.supports.constants.Configs;
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
-import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
-import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class JwtTokenVerifier extends OncePerRequestFilter {
+@RestController
+@AllArgsConstructor
+public class validateSession {
 
     private final UserDetailsRepository userDetailsRepository;
-    private final TokenDetails tokenDetails;
 
-    public JwtTokenVerifier(UserDetailsRepository userDetailsRepository, TokenDetails tokenDetails) {
-        this.userDetailsRepository = userDetailsRepository;
-        this.tokenDetails = tokenDetails;
-    }
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-
+    @GetMapping("validateSession")
+    public String validateToken(HttpServletRequest request,
+                              HttpServletResponse response){
+        System.out.println("response");
         String authorizationHeader = request.getHeader("Authorization");
-        boolean tokenValidator = Boolean.parseBoolean(request.getHeader("TokenValidator"));
 
-        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")||tokenValidator) {
-            filterChain.doFilter(request, response);
-            return;
+        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+            throw new ThrowApiError("invalid token",9999, HttpStatus.UNAUTHORIZED);
         }
 
         String token = authorizationHeader.replace("Bearer ", "");
@@ -75,11 +66,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            tokenDetails.setUserId(body.getSubject());
-        } catch (JwtException e) {
+        } catch (Exception e) {
             throw new ThrowApiError("invalid token",9999, HttpStatus.UNAUTHORIZED);
         }
-
-        filterChain.doFilter(request, response);
+        return "";
     }
 }
