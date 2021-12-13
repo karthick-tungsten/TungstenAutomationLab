@@ -91,4 +91,24 @@ public class UserDetailsManagementService {
         return map;
     }
 
+    /***
+     * delete user with id parameter and display error mssage
+     * @param id
+     * @return
+     */
+    public Map<String, Object> deleteUser(String id) {
+        Map<String, Object> map = new HashMap<>();
+        Optional<Users> user = userDetailsRepository.findById(id);
+        if(user.isPresent()) {
+            userDetailsRepository.delete(user.get());
+            map.put("status", 200);
+            map.put("message", "user delete successfully!");
+        }else{
+            map.put("status", 400);
+            map.put("message", "user not found");
+            map.put("timestamp",LocalDateTime.now().toString());
+            map.put("errorcode","1030");
+        }
+        return map;
+        }
 }

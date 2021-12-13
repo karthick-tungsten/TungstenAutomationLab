@@ -1,6 +1,7 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.superadmin;
 
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.requestbody.SuperAdminRequestBody;
+import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllProjectsResponse;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllUsersResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,13 @@ public class SuperAdminController {
     @PreAuthorize("hasRole('SUPERADMIN')")
     public GetAllUsersResponse getAllUsers(){
         return superAdminService.getAllUsers();
+    }
+
+
+    @GetMapping(path = "getAllProjects")
+    @PreAuthorize("hasRole('SUPERADMIN')")
+    public GetAllProjectsResponse getAllProjects(){
+        return superAdminService.getAllProjects();
     }
 
 
