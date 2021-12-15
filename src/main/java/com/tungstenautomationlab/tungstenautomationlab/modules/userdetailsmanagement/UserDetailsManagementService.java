@@ -10,10 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.time.format.DateTimeFormatter.ofLocalizedDateTime;
 
 @Service
 public class UserDetailsManagementService {
@@ -38,13 +42,15 @@ public class UserDetailsManagementService {
         user.setEmail(requestBody.getEmail());
         user.setPassword(passwordConfig.passwordEncoder().encode(requestBody.getPassword()));
         user.setRole(requestBody.getRole());
-        user.setCreatedOn(LocalDateTime.now().toString());
+        user.setCreatedOn(LocalDate.now().toString());
         userDetailsRepository.save(user);
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);
         map.put("message", "user created successfully!");
         return map;
     }
+
+
 
     private boolean validateEmailFormat(String email) {
         Pattern VALID_EMAIL_ADDRESS_REGEX =

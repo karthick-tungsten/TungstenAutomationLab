@@ -16,8 +16,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.FormatStyle;
 import java.util.*;
+
+import static java.time.format.DateTimeFormatter.ofLocalizedDateTime;
 
 @Service
 @AllArgsConstructor
@@ -42,7 +46,7 @@ public class SuperAdminService {
         users.setPassword(passwordConfig.passwordEncoder().encode(body.getPassword()));
         users.setFullName("Super Admin");
         users.setRole(Roles.SUPERADMIN.name());
-        users.setCreatedOn(LocalDateTime.now().toString());
+        users.setCreatedOn(LocalDate.now().toString());
         userDetailsRepository.save(users);
         Map<String, Object> response = new HashMap<>();
         response.put("status", 200);
