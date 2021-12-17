@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -27,7 +28,7 @@ public class ProjectService {
         project.setProjectName(projectName);
         project.setProjectId(UUID.randomUUID().toString());
         project.setOwner(tokenDetails.getUserId());
-        project.setCreatedOn(LocalDateTime.now().toString());
+        project.setCreatedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy, hh:mm:ss a")));
         projectRepository.save(project);
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);

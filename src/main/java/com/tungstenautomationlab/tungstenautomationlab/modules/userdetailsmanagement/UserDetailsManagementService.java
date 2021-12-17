@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -42,7 +43,7 @@ public class UserDetailsManagementService {
         user.setEmail(requestBody.getEmail());
         user.setPassword(passwordConfig.passwordEncoder().encode(requestBody.getPassword()));
         user.setRole(requestBody.getRole());
-        user.setCreatedOn(LocalDate.now().toString());
+        user.setCreatedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy, hh:mm:ss a")));
         userDetailsRepository.save(user);
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
@@ -46,7 +47,7 @@ public class SuperAdminService {
         users.setPassword(passwordConfig.passwordEncoder().encode(body.getPassword()));
         users.setFullName("Super Admin");
         users.setRole(Roles.SUPERADMIN.name());
-        users.setCreatedOn(LocalDate.now().toString());
+        users.setCreatedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy, hh:mm:ss a")));
         userDetailsRepository.save(users);
         Map<String, Object> response = new HashMap<>();
         response.put("status", 200);
