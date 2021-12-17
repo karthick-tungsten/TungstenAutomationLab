@@ -1,5 +1,6 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UpdateUserRequestBody;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,4 +40,9 @@ public class UserDetailsManagementController {
        return userDetailsService.deleteUser(id);
     }
 
+    @PutMapping("api/v1/updateUserDetails")
+    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    public Map<String, Object> updateUserDetails(@RequestBody UpdateUserRequestBody body){
+        return userDetailsService.updateUserDetails(body);
+    }
 }
