@@ -3,9 +3,10 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.project;
 import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Map;
 
 @Entity(name = "ProjectDetails")
-public class Project {
+public class Project  {
 
     @Id
     private String projectId;

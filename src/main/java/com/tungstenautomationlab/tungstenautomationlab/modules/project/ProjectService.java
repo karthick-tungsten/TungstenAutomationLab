@@ -1,10 +1,13 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.project;
 
+import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -18,13 +21,14 @@ public class ProjectService {
         this.tokenDetails = tokenDetails;
     }
 
+
     public Map<String, Object> createProject(Map<String, String> body) {
         String projectName = body.get("projectName");
         Project project = new Project();
         project.setProjectName(projectName);
         project.setProjectId(UUID.randomUUID().toString());
         project.setOwner(tokenDetails.getUserId());
-        project.setCreatedOn(LocalDateTime.now().toString());
+        project.setCreatedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy, hh:mm:ss a")));
         projectRepository.save(project);
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);
@@ -45,5 +49,36 @@ public class ProjectService {
             out.add(map);
         }));
         return out;
+    }
+
+    /***
+     * update project using updatepro parameter
+     * valdiate projectname and error checking using validateUpdateProjectRequestBody function
+     * @param updatepro
+     * @return
+     */
+
+    public Map<String, Object> updateproject(Map<String, String> updatepro) {
+        validateUpdateProjectRequestBody(updatepro);
+        Project project = projectRepository.findById(updatepro.get("projectId")).get();
+        project.setProjectName(updatepro.get("updateprojectName"));
+        projectRepository.save(project);
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", 200);
+        map.put("message", "update project successfully!");
+        return map;
+    }
+
+    private void validateUpdateProjectRequestBody(Map<String, String> updatepro) {
+        if (updatepro.get("projectId").equals("")){
+            throw new ThrowApiError("projectid cannot be empty",1030, HttpStatus.BAD_REQUEST);
+        }
+        if (updatepro.get("updateprojectName").equals("")){
+            throw new ThrowApiError("projectname cannot be empty",1031, HttpStatus.BAD_REQUEST);
+        }
+       Optional<Project> project = projectRepository.findById(updatepro.get("projectId"));
+        if(!project.isPresent()){
+            throw new ThrowApiError("project cannot found",1032,HttpStatus.BAD_REQUEST);
+        }
     }
 }

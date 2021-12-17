@@ -1,12 +1,10 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UpdateUserRequestBody;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -29,5 +27,22 @@ public class UserDetailsManagementController {
     @GetMapping("api/v1/getUserDetails")
     public Map<String, String> getUserDetails(){
         return userDetailsService.getUserDetails();
+    }
+
+    /***
+     * deletemapping for delete user form database
+     * @param id
+     * @return
+     */
+    @DeleteMapping("api/v1/deleteUser/{id}")
+    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    public Map<String, Object> deleteUser(@PathVariable("id")  String id){
+       return userDetailsService.deleteUser(id);
+    }
+
+    @PutMapping("api/v1/updateUserDetails")
+    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    public Map<String, Object> updateUserDetails(@RequestBody UpdateUserRequestBody body){
+        return userDetailsService.updateUserDetails(body);
     }
 }
