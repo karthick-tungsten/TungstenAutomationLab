@@ -2,6 +2,7 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.superadmin;
 
 import com.tungstenautomationlab.tungstenautomationlab.modules.project.Project;
 import com.tungstenautomationlab.tungstenautomationlab.modules.project.ProjectRepository;
+import com.tungstenautomationlab.tungstenautomationlab.modules.projectassignment.ProjectAssignmentRepository;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.requestbody.SuperAdminRequestBody;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllProjectsResponse;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllUsersResponse;
@@ -13,13 +14,12 @@ import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanage
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.Users;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 
 import static java.time.format.DateTimeFormatter.ofLocalizedDateTime;
@@ -32,6 +32,7 @@ public class SuperAdminService {
     private final PasswordConfig passwordConfig;
     private final ProjectRepository projectRepository;
     private final TokenDetails tokenDetails;
+    private final ProjectAssignmentRepository assignmentRepository;
 
     /***
      * method to create super admin
