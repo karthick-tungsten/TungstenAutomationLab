@@ -1,19 +1,21 @@
 package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement;
 
+import com.tungstenautomationlab.tungstenautomationlab.modules.project.ProjectRepository;
+import com.tungstenautomationlab.tungstenautomationlab.modules.projectassignment.ProjectAssignment;
+import com.tungstenautomationlab.tungstenautomationlab.modules.projectassignment.ProjectAssignmentRepository;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UpdateUserRequestBody;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.responsebody.GetUserResponse;
 import com.tungstenautomationlab.tungstenautomationlab.supports.expection.ThrowApiError;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.PasswordConfig;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.Roles;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,18 +23,14 @@ import java.util.regex.Pattern;
 import static java.time.format.DateTimeFormatter.ofLocalizedDateTime;
 
 @Service
+@AllArgsConstructor
 public class UserDetailsManagementService {
 
     private final UserDetailsRepository userDetailsRepository;
     private final PasswordConfig passwordConfig;
     private final TokenDetails tokenDetails;
-
-    @Autowired
-    public UserDetailsManagementService(UserDetailsRepository userDetailsRepository, PasswordConfig passwordConfig, TokenDetails tokenDetails) {
-        this.userDetailsRepository = userDetailsRepository;
-        this.passwordConfig = passwordConfig;
-        this.tokenDetails = tokenDetails;
-    }
+    private final ProjectAssignmentRepository projectAssignmentRepository;
+    private final ProjectRepository projectRepository;
 
     public Map<String, Object> createUser(UserCreateRquestBody requestBody) {
         validateRequestBody(requestBody);
@@ -50,7 +48,6 @@ public class UserDetailsManagementService {
         map.put("message", "user created successfully!");
         return map;
     }
-
 
 
     private boolean validateEmailFormat(String email) {
@@ -87,16 +84,28 @@ public class UserDetailsManagementService {
         }
     }
 
-    public Map<String, String> getUserDetails() {
+    public GetUserResponse getUserDetails() {
         String userId = tokenDetails.getUserId();
         Users user = userDetailsRepository.findById(userId).get();
-        Map<String, String> map = new HashMap<>();
-        map.put("fullName", user.getFullName());
-        map.put("email", user.getEmail());
-        map.put("role", user.getRole());
-        map.put("createdOn", user.getCreatedOn());
-        map.put("lastUpdate", user.getLastUpdate());
-        return map;
+
+        List<GetUserResponse.ProjectDetails> projectDetailsList=new ArrayList<>();
+        List<ProjectAssignment> projectList=projectAssignmentRepository.findByAssignedUser(userId);
+        projectList.forEach((project)->{
+            GetUserResponse.ProjectDetails projectDetails=new GetUserResponse.ProjectDetails();
+            projectDetails.setProjectId(project.getProjectId());
+            projectDetails.setProjectName(projectRepository.findById(project.getProjectId()).get().getProjectName());
+            projectDetails.setDefault(project.getIsDefault());
+            projectDetailsList.add(projectDetails);
+        });
+
+        GetUserResponse response = new GetUserResponse();
+        response.setFullName(user.getFullName());
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+        response.setCreatedOn(user.getCreatedOn());
+        response.setLastUpdate(user.getLastUpdate());
+        response.setProjectDetails(projectDetailsList);
+        return response;
     }
 
     /***
@@ -149,7 +158,7 @@ public class UserDetailsManagementService {
                 updateDetails += "email,";
             }
             if (body.getPassword() != null && !body.getPassword().equals("")) {
-                if(body.getPassword().length() < 5){
+                if (body.getPassword().length() < 5) {
                     throw new ThrowApiError("password can't be less than 5", 1009, HttpStatus.BAD_REQUEST);
                 }
                 _user.setPassword(passwordConfig.passwordEncoder().encode(body.getPassword()));
@@ -171,9 +180,9 @@ public class UserDetailsManagementService {
             if (saveFlag != 0) {
                 userDetailsRepository.save(_user);
                 response.put("status", 200);
-                response.put("message", updateDetails.substring(0,updateDetails.length()-1) + " updated successfully");
+                response.put("message", updateDetails.substring(0, updateDetails.length() - 1) + " updated successfully");
                 return response;
-            }else{
+            } else {
                 response.put("status", 400);
                 response.put("message", "nothing updated");
                 return response;

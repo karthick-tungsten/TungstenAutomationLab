@@ -2,6 +2,7 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanag
 
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UpdateUserRequestBody;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.requestbody.UserCreateRquestBody;
+import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.responsebody.GetUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class UserDetailsManagementController {
     }
 
     @GetMapping("api/v1/getUserDetails")
-    public Map<String, String> getUserDetails(){
+    public GetUserResponse getUserDetails(){
         return userDetailsService.getUserDetails();
     }
 
