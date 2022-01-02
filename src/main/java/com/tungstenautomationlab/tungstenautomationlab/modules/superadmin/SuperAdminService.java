@@ -12,14 +12,13 @@ import com.tungstenautomationlab.tungstenautomationlab.supports.security.Roles;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.UserDetailsRepository;
 import com.tungstenautomationlab.tungstenautomationlab.modules.userdetailsmanagement.Users;
 import com.tungstenautomationlab.tungstenautomationlab.supports.security.TokenDetails;
+import com.tungstenautomationlab.tungstenautomationlab.supports.simpleresponse.SimpleResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 
 import static java.time.format.DateTimeFormatter.ofLocalizedDateTime;
@@ -94,9 +93,10 @@ public class SuperAdminService {
         response.put("message", "super admin password reset successfully!");
         return response;
     }
-    private void verifyResetPassword(SuperAdminRequestBody body){
 
-        if (body.getUsername().isEmpty()|| body.getUsername().length() < 3)
+    private void verifyResetPassword(SuperAdminRequestBody body) {
+
+        if (body.getUsername().isEmpty() || body.getUsername().length() < 3)
             throw new ThrowApiError("username can't be blank", 1012, HttpStatus.BAD_REQUEST);
         if (body.getNewpassword().isEmpty() || body.getNewpassword().length() < 5)
             throw new ThrowApiError("password can't be blank and less than 5 characters", 1013, HttpStatus.BAD_REQUEST);
@@ -104,8 +104,8 @@ public class SuperAdminService {
     }
 
     private void validateResetPassword(SuperAdminRequestBody body) {
-        if(body.getNewpassword().length()<5){
-            throw new ThrowApiError("password can't be blank and less than 5 characters",1014,HttpStatus.BAD_REQUEST);
+        if (body.getNewpassword().length() < 5) {
+            throw new ThrowApiError("password can't be blank and less than 5 characters", 1014, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -146,7 +146,7 @@ public class SuperAdminService {
     }
 
     public GetAllProjectsResponse getAllProjects() {
-        String loggedInId=tokenDetails.getUserId();
+        String loggedInId = tokenDetails.getUserId();
         List<Project> projects = projectRepository.findAll();
 
         GetAllProjectsResponse.MetaData metaData = new GetAllProjectsResponse.MetaData();
@@ -161,8 +161,8 @@ public class SuperAdminService {
             projectDetails.setProjectName(project.getProjectName());
 
             GetAllProjectsResponse.ProjectList.OwnerDetails ownerDetails = new GetAllProjectsResponse.ProjectList.OwnerDetails();
-            Users user= userDetailsRepository.findById(project.getOwner()).get();
-            ownerDetails.setOwnerName((loggedInId.equals(project.getOwner()))?"Self":user.getFullName());
+            Users user = userDetailsRepository.findById(project.getOwner()).get();
+            ownerDetails.setOwnerName((loggedInId.equals(project.getOwner())) ? "Self" : user.getFullName());
             ownerDetails.setOwnerId(project.getOwner());
 
             GetAllProjectsResponse.ProjectList projectList = new GetAllProjectsResponse.ProjectList();
@@ -175,6 +175,14 @@ public class SuperAdminService {
         response.setProjectList(projectLists);
         response.setMetaData(metaData);
         return response;
+    }
+
+    public SimpleResponse getSuperadminDetails() {
+        Optional<Users> user = userDetailsRepository.findByRole(Roles.SUPERADMIN.name());
+        if (user.isPresent())
+            return new SimpleResponse("available", HttpStatus.OK);
+        else
+            throw new ThrowApiError("not available", 0, HttpStatus.NOT_FOUND);
     }
 }
 

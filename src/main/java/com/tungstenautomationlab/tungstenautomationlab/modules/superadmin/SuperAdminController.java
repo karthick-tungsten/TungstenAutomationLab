@@ -3,6 +3,7 @@ package com.tungstenautomationlab.tungstenautomationlab.modules.superadmin;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.requestbody.SuperAdminRequestBody;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllProjectsResponse;
 import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.responsebody.GetAllUsersResponse;
+import com.tungstenautomationlab.tungstenautomationlab.supports.simpleresponse.SimpleResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,8 @@ public class SuperAdminController {
         return superAdminService.getAllProjects();
     }
 
-
+    @GetMapping(path = "homePageNavigation")
+    public SimpleResponse homePageNavigation(){
+        return this.superAdminService.getSuperadminDetails();
+    }
 }

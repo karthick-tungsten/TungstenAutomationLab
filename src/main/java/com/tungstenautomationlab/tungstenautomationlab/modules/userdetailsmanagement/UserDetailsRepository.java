@@ -4,6 +4,7 @@ import com.tungstenautomationlab.tungstenautomationlab.modules.superadmin.respon
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDetailsRepository extends JpaRepository<Users, String> {
     List<Users> findByEmail(String email);
@@ -11,4 +12,6 @@ public interface UserDetailsRepository extends JpaRepository<Users, String> {
     List<Users> getByRole(String superadmin);
 
     List<UserDetailsWithoutPassword> findAllByRoleNot(String role);
+
+    Optional<Users> findByRole(String name);
 }
